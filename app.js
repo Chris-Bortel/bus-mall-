@@ -12,35 +12,82 @@ console.log('i work');
 // 1. Create a constructor function that creates an object associated with each product, and has the following properties:
 //    Name of the product
 //   TODO: File path of image
-var allProducts = []; // array for the products
 
-function Products(productName, imageSrc){
+//global variable
+var allProducts = []; // array for the products
+var imagesOnScreen = 3;
+
+function Product(productName, imageSrc){
   this.name = productName;
   this.imageSrc = imageSrc;
   this.clickCount = 0;
 
   allProducts.push(this);// take the object that I am building and put it where I want it
 }
+new Product('bag', 'assets/bag.jpg' );
+new Product('banana', 'assets/banana.jpg');
+new Product('bathroom', 'assets/bathroom.jpg');
 
-// Products.prototype.render = function(){
+Product.prototype.render = function(){
+  var target = document.getElementById('product');
+  var newLi = document.createElement('li');
+  var newP = document.createElement('p');
+  newP.textContent = 'clicks: ' + this.clickCount;
 
-// }
+  var newImg = document.createElement('img');
+  newImg.src = this.imageSrc;
+  newImg.id = this.imageSrc;
+
+  newLi.appendChild(newImg);
+  newLi.appendChild(newP);
+
+  target.appendChild(newLi);
+};
 
 // 2. Create an algorithm that will randomly generate three unique product images from the images directory and display them side-by-side-by-side in the browser window.
-// function putNewProductsOnPage()
 
-// TODO: write a fucntion for 3 random numbers. (one first)
-//    could generate 1 rand numb and run three times
-//    generate 3 random numbers and put to an empty array
-//        return the array
+function getRandomNumbers(){
+  var randNumberArray=[];
+  for(var i =0 ; i < imagesOnScreen; i++){
+    var randProduct = Math.floor(Math.random() * allProducts.length);
+    randNumberArray.push(randProduct);
+  }
+  return randNumberArray;
+}
+
+function renderAll(){
+  var randNumbsNewArray = getRandomNumbers();
+  for(var i = 0; i < randNumbsNewArray.length ; i++){
+
+    allProducts[randNumbsNewArray[i]].render();//nexting indexes
+  }
+}
+renderAll();
 
 // Attach an event listener to the section of the HTML page where the images are going to be displayed.
 //  1. find a target
 //  2. make the element/give it content
 //  3. append it to the target
 
+// TODO: for loop that uses one 
+var clicks = 1;
+
+function handleClicks(eventClick){
+if (clicks < 3) {
+  console.log('you clicked me' + clicks);
+  clicks++;
+
+}
+}
+
+var ulEl = document.getElementById('product');
+ulEl.addEventListener('click', handleClicks);
+
+// TODO: 3 click max
 // Once the users ‘clicks’ a product, generate three new products for the user to pick from.
+
 // As a user, I would like to track the selections made by viewers so that I can determine which products to keep for the catalog.
+
 // In the constructor function define a property to hold the number of times a product has been clicked.
 
 // After every selection by the viewer, update the newly added property to reflect if it was clicked.
