@@ -16,9 +16,10 @@ console.log('i work');
 //global variable
 var allProducts = []; // array for the products
 var imagesOnScreen = 3;
+var target = document.getElementById('product');
 
 function Product(productName, imageSrc){
-  this.name = productName;
+  this.productName = productName;
   this.imageSrc = imageSrc;
   this.clickCount = 0;
 
@@ -29,14 +30,18 @@ new Product('banana', 'assets/banana.jpg');
 new Product('bathroom', 'assets/bathroom.jpg');
 
 Product.prototype.render = function(){
-  var target = document.getElementById('product');
+
   var newLi = document.createElement('li');
+  newLi.id = this.name;//makes id
   var newP = document.createElement('p');
   newP.textContent = 'clicks: ' + this.clickCount;
-
+  newP.color = '#bada55';
   var newImg = document.createElement('img');
   newImg.src = this.imageSrc;
   newImg.id = this.imageSrc;
+
+  newImg.height = '400';
+  
 
   newLi.appendChild(newImg);
   newLi.appendChild(newP);
@@ -70,18 +75,36 @@ renderAll();
 //  3. append it to the target
 
 // TODO: for loop that uses one 
-var clicks = 1;
+var clicks = 0;
 
 function handleClicks(eventClick){
-if (clicks < 3) {
-  console.log('you clicked me' + clicks);
-  clicks++;
-
-}
+  if (clicks < 3) {
+    // console.log(allProducts);
+    clicks++;
+    for(var i = 0; i < allProducts.length; i++){
+      console.log('x');
+      if (eventClick.target.id === allProducts[i].imageSrc){
+        allProducts[i].clickCount++;
+        console.log(allProducts);
+      }
+    }
+    target.innerHTML = '';
+    renderAll();
+  } else if (clicks === 3){
+    target.innerHTML = '';
+    for(var i = 0; i < allProducts.length; i++){
+      var newLiEl = document.createElement('li');
+      newLiEl.textContent = allProducts[i].productName + ' had ' + allProducts[i].clickCount;
+      target.appendChild(newLiEl);
+    }
 }
 
 var ulEl = document.getElementById('product');
 ulEl.addEventListener('click', handleClicks);
+
+//TODO: make new variable that tracks the number of times that the image was shown.
+//this.times[0]=
+//need an if 
 
 // TODO: 3 click max
 // Once the users ‘clicks’ a product, generate three new products for the user to pick from.
@@ -100,5 +123,5 @@ ulEl.addEventListener('click', handleClicks);
 
 // After voting rounds have been completed, remove the event listeners on the product.
 
-// Display the list of all the products followed by the votes received and number of times seen for each. Example: Banana Slicer had 3 votes and was shown 5 times
-
+// TODO:Display the list of all the products followed by the votes received and number of times seen for each. Example: Banana Slicer had 3 votes and was shown 5 times
+'}'
